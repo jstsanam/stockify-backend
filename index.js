@@ -15,12 +15,12 @@ app.get("/api/history", (req, res) => {
 
 app.post("/api/history", (req, res) => {
   const { transaction } = req.body;
-  console.log("transaction: ", transaction);
+
   if (!transaction)
-    return res.status(400).json({ error: "Transaction is required" });
+    return res.status(400).json({ error: "Transaction not found!" });
 
   historyBuySell.push(transaction);
-  res.status(201).json({ message: "Transaction added successfully" });
+  res.status(201).json({ message: "Transaction completed successfully" });
 });
 
 app.listen(PORT, () => {
