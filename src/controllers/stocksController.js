@@ -1,5 +1,10 @@
-import { stocks } from "../data/stocks.js";
+import { StockModel } from "../models/stockModel.js";
 
-export const getStocks = (req, res) => {
-  res.json(stocks);
+export const getStocks = async (req, res) => {
+  try {
+    const stocks = await StockModel.find();
+    res.status(200).json(stocks);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch stocks" });
+  }
 };
