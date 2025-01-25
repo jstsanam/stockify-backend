@@ -6,11 +6,10 @@ export const connectDB = async () => {
       "mongodb+srv://jstsanam:" +
         process.env.MONGOPASS +
         "@cluster0.uynmuf0.mongodb.net/realTimeStockMarketDB",
-      { useNewUrlParser: true, useUnifiedTopology: true },
       { connectTimeoutMS: 30000 }
     );
-    console.log("MongoDB connected successfully");
+    console.log("Database connected successfully");
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    console.error("Error connecting to database:", error);
   }
 };
