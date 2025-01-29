@@ -1,10 +1,10 @@
 import express from "express";
-import { getTransactionsHistory, postTransaction } from "../controllers/transactionsHistoryController.js";
+import { getTransactionsHistoryController, postTransactionController } from "../controllers/transactionsHistoryController.js";
 
 // Route handler for Transactions History Route
 const transactionsHistoryRoute = express.Router();
 
-transactionsHistoryRoute.get("/", getTransactionsHistory);
-transactionsHistoryRoute.post("/", postTransaction);
+transactionsHistoryRoute.get("/", getTransactionsHistoryController);
+transactionsHistoryRoute.post("/", postTransactionController);
 
 export default transactionsHistoryRoute;
