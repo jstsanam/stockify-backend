@@ -1,11 +1,10 @@
 import express from "express";
-import { getUsersController, userSignUpController, userSignInController } from "../controllers/usersController.js";
+import { authenticateUser } from "../middlewares/authMiddleware.js";
+import { getUserController } from "../controllers/userController.js";
 
 // Route handler for Users Route
 const usersRoute = express.Router();
 
-usersRoute.get("/", getUsersController);
-usersRoute.post("/signup", userSignUpController);
-usersRoute.post("/signin", userSignInController)
+usersRoute.get("/", authenticateUser, getUserController);
 
 export default usersRoute;

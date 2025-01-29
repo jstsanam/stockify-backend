@@ -4,10 +4,10 @@ import {
   TransactionType,
 } from "../constants/enums.js";
 
-export const getTransactionsHistory = async () => {
+export const getTransactionsHistoryByEmail = async () => {
   try {
     const transactions = await TransactionHistoryModel.find();
-    return { transactions };
+    return transactions;
   } catch (error) {
     throw new Error("Failed to fetch transactions history");
   }
@@ -50,7 +50,7 @@ export const postTransaction = async (transaction) => {
   try {
     const newTransaction = new TransactionHistoryModel(transaction);
     const savedTransaction = await newTransaction.save();
-    return { savedTransaction };
+    return savedTransaction;
   } catch (error) {
     throw new Error("Error saving transaction!");
   }

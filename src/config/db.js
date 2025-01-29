@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import { ENV } from "./environment.js";
 
 export const connectDB = async () => {
   try {
     mongoose.connect(
       "mongodb+srv://jstsanam:" +
-        process.env.MONGOPASS +
+        ENV.MONGOPASS +
         "@cluster0.uynmuf0.mongodb.net/realTimeStockMarketDB",
       { connectTimeoutMS: 30000 }
     );

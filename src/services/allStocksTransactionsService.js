@@ -3,7 +3,7 @@ import { AllStocksTransactionsModel } from "../models/allStocksTransactionsModel
 export const getAllStocksTransactions = async () => {
   try {
     const allStocksTransactions = await AllStocksTransactionsModel.find();
-    return { allStocksTransactions };
+    return allStocksTransactions;
   } catch (error) {
     throw new Error("Failed to fetch all stocks transactions");
   }

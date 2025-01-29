@@ -1,50 +1,24 @@
 import { UserModel } from "../models/userModel.js";
 
-// Service to get all users
-export const getUsersService = async () => {
-  try {
-    const users = await UserModel.find();
-    return { users };
-  } catch (error) {
-    throw new Error("Failed to fetch users");
+export const getUserByEmail = async (email) => {
+  const user = await UserModel.findOne({ email });
+  if (!user) {
+    throw new Error(`No user found with email: ${email}`);
   }
-};
+  return user;
+}
 
-// Service to sign up a new user
-export const userSignUpService = async (userData) => {
-  const { name, email, password, currentBalance } = userData;
-
+export const createUser = async (name, email, password, current_balance) => {
   try {
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      throw new Error("User already exists!");
-    }
-
     const newUser = await UserModel.create({
       name,
       email,
       password,
-      currentBalance,
+      current_balance,
     });
 
-    return { newUser };
+    return newUser;
   } catch (error) {
-    throw new Error(error.message || "Failed to create user");
+    throw new Error("User already exists!");
   }
-};
-
-// Service to sign in an existing user
-export const userSignInService = async (userData) => {
-  const { email, password } = userData;
-
-  try {
-    const user = await UserModel.findOne({ email, password });
-    if (!user) {
-      throw new Error("Incorrect email or password!");
-    }
-
-    return { message: "User logged in successfully!" };
-  } catch (error) {
-    throw new Error(error.message || "Failed to sign user in");
-  }
-};
+}
