@@ -1,4 +1,7 @@
-import { getTransactionsHistoryByEmail, postTransaction } from "../services/transactionHistoryService.js";
+import {
+  getTransactionsHistoryByEmail,
+  postTransaction,
+} from "../services/transactionHistoryService.js";
 
 export const getTransactionsHistoryController = async (req, res) => {
   try {
@@ -10,7 +13,7 @@ export const getTransactionsHistoryController = async (req, res) => {
 };
 
 export const postTransactionController = async (req, res) => {
-  const transaction = req.body;
+  const { transaction } = req.body;
 
   try {
     const savedTransaction = await postTransaction(transaction);

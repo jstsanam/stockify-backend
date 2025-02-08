@@ -1,5 +1,5 @@
 {
-  "name": "real-time-stock-market-backend",
+  "name": "stockify-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

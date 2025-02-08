@@ -1,4 +1,10 @@
+import { UserDTO } from "../dtos/res/userDTO.js";
 import { UserModel } from "../models/userModel.js";
+
+export const getUserDTOByEmail = async (email) => {
+  const user = await getUserByEmail(email);
+  return new UserDTO(user);
+}
 
 export const getUserByEmail = async (email) => {
   const user = await UserModel.findOne({ email });

@@ -1,12 +1,14 @@
 import { createUser, getUserByEmail } from "./usersService.js";
 import { generateToken } from "../utils/jwtUtil.js";
 import { compareData, hashData } from "../utils/hashUtil.js";
+import { ENV } from "../config/environment.js";
 
 // Service to sign up a new user
 export const userSignup = async (userData) => {
-  const { name, email, password, current_balance } = userData;
+  const initialBalance = ENV.USER_INITIAL_BALANCE;
+  const { name, email, password } = userData;
   const hashedPassword = await hashData(password);
-  const newUser = await createUser(name, email, hashedPassword, current_balance);
+  const newUser = await createUser(name, email, hashedPassword, initialBalance);
   return generateToken(newUser);
 };
 

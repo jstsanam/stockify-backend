@@ -1,11 +1,8 @@
-import {
-  userSignup,
-  userSignin,
-} from "../services/authService.js";
+import { userSignup, userSignin } from "../services/authService.js";
 
 // Controller to sign up a new user
 export const signupController = async (req, res) => {
-  const userData = req.body;
+  const { userData } = req.body;
 
   try {
     const token = await userSignup(userData);
@@ -19,7 +16,7 @@ export const signupController = async (req, res) => {
 
 // Controller to sign in an existing user
 export const signinController = async (req, res) => {
-  const userData = req.body;
+  const { userData } = req.body;
 
   try {
     const token = await userSignin(userData);

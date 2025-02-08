@@ -8,16 +8,16 @@ export const generateToken = (user) => {
     },
     ENV.SECRET,
     {
-      expiresIn: "1h",
+      expiresIn: "24h",
       algorithm: "HS256",
     }
   );
 };
 
 export const decodeToken = (token) => {
-    try {
-        return jwt.verify(token, ENV.SECRET);
-    } catch (err) {
-        throw err;
-    }
-}
+  try {
+    return jwt.verify(token, ENV.SECRET);
+  } catch (err) {
+    throw err;
+  }
+};
