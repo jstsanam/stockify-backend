@@ -6,9 +6,11 @@ import { ENV } from "../config/environment.js";
 // Service to sign up a new user
 export const userSignup = async (userData) => {
   const initialBalance = ENV.USER_INITIAL_BALANCE;
-  const { name, email, password } = userData;
+
+  const { name, email, gender, password } = userData;
+
   const hashedPassword = await hashData(password);
-  const newUser = await createUser(name, email, hashedPassword, initialBalance);
+  const newUser = await createUser(name, email, gender, hashedPassword, initialBalance);
   return generateToken(newUser);
 };
 
