@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 
-const stockSchema = new mongoose.Schema({
-  stock_name: { type: String, required: true },
-  stock_symbol: { type: String, required: true },
+export const stockSchema = new mongoose.Schema({
+  stock_name: { type: String, required: true, unique: true, index: true },
   base_price: { type: Number, required: true },
+});
+
+export const stockSchemaWithoutId = new mongoose.Schema({
+  stockSchema,
+  _id: false,
 });
 
 export const StockModel = mongoose.model("stock", stockSchema);

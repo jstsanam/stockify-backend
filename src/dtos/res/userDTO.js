@@ -5,3 +5,9 @@ export class UserProfileDTO {
     this.gender = user.gender;
   }
 }
+
+export class UserWatchlistDTO {
+  constructor(user) {
+    this.watchlist = user.watchlist;
+  }
+}

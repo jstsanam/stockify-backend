@@ -6,7 +6,7 @@ export const connectDB = async () => {
     mongoose.connect(
       "mongodb+srv://jstsanam:" +
         ENV.MONGOPASS +
-        "@cluster0.uynmuf0.mongodb.net/realTimeStockMarketDB",
+        "@cluster0.uynmuf0.mongodb.net/stockifyDB",
       { connectTimeoutMS: 30000 }
     );
     console.log("Database connected successfully");
