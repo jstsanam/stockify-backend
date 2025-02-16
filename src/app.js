@@ -17,17 +17,13 @@ const allowedOrigins = ENV.ALLOWED_ORIGINS.split(',');
 // from different domains which are blocked otherwise.
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    origin: '*', // Allows requests from ANY origin
+    methods: '*', // Allows ALL HTTP methods (GET, POST, PUT, DELETE, etc.)
+    credentials: true, // Allow credentials like cookies and auth headers
   })
 );
+
+app.options('*', cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
