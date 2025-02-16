@@ -16,6 +16,10 @@ export const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("App is running 😉")
+})
+
 app.use(STOCKS_ROUTE_URL, stocksRoute);
 app.use(AUTH_ROUTE_URL, authRoute);
 app.use(USER_ROUTE_URL, userRoute);
