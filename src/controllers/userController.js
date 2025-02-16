@@ -1,17 +1,11 @@
-import {
-  getUserProfile,
-  updateUserProfile,
-  getUserWatchlist,
-  addStockToUserWatchlist,
-  removeStockFromUserWatchlist
-} from "../services/usersService.js";
+import * as userServices from "../services/usersService.js";
 
 export const getUserProfileController = async (req, res) => {
   try {
     if (!req.userEmail) {
       return res.status(400).json({ error: "User data not found." });
     }
-    const userProfile = await getUserProfile(req.userEmail);
+    const userProfile = await userServices.getUserProfile(req.userEmail);
     return res
       .status(200)
       .json({ message: "User profile fetched successfully", userProfile });
@@ -25,7 +19,10 @@ export const updateUserProfileController = async (req, res) => {
     if (!req.userEmail) {
       return res.status(400).json({ error: "User data not found." });
     }
-    const userProfile = await updateUserProfile(req.userEmail, req.body);
+    const userProfile = await userServices.updateUserProfile(
+      req.userEmail,
+      req.body
+    );
     return res
       .status(200)
       .json({ message: "User profile updated successfully", userProfile });
@@ -39,7 +36,7 @@ export const getUserWatchlistController = async (req, res) => {
     if (!req.userEmail) {
       return res.status(400).json({ error: "User data not found." });
     }
-    const userWatchlist = await getUserWatchlist(req.userEmail);
+    const userWatchlist = await userServices.getUserWatchlist(req.userEmail);
     return res
       .status(200)
       .json({ message: "User watchlist fetched successfully", userWatchlist });
@@ -53,10 +50,14 @@ export const addStockToUserWatchlistController = async (req, res) => {
     if (!req.userEmail) {
       return res.status(400).json({ error: "User data not found." });
     }
-    const userWatchlist = await addStockToUserWatchlist(req.userEmail, req.body);
-    return res
-      .status(200)
-      .json({ message: "Stock added to user watchlist successfully", userWatchlist });
+    const userWatchlist = await userServices.addStockToUserWatchlist(
+      req.userEmail,
+      req.body
+    );
+    return res.status(200).json({
+      message: "Stock added to user watchlist successfully",
+      userWatchlist,
+    });
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error." });
   }
@@ -67,10 +68,49 @@ export const removeStockFromUserWatchlistController = async (req, res) => {
     if (!req.userEmail) {
       return res.status(400).json({ error: "User data not found." });
     }
-    const userWatchlist = await removeStockFromUserWatchlist(req.userEmail, req.body);
-    return res
-      .status(200)
-      .json({ message: "Stock removed from user watchlist successfully", userWatchlist });
+    const userWatchlist = await userServices.removeStockFromUserWatchlist(
+      req.userEmail,
+      req.body
+    );
+    return res.status(200).json({
+      message: "Stock removed from user watchlist successfully",
+      userWatchlist,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error." });
+  }
+};
+
+export const getUserTransactionsController = async (req, res) => {
+  try {
+    if (!req.userEmail) {
+      return res.status(400).json({ error: "User data not found." });
+    }
+    const userTransactions = await userServices.getUserTransactions(
+      req.userEmail
+    );
+    return res.status(200).json({
+      message: "User transactions fetched successfully",
+      userTransactions,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error." });
+  }
+};
+
+export const addUserTransactionController = async (req, res) => {
+  try {
+    if (!req.userEmail) {
+      return res.status(400).json({ error: "User data not found." });
+    }
+    const userTransactions = await userServices.addUserTransaction(
+      req.userEmail,
+      req.body
+    );
+    return res.status(200).json({
+      message: "User transaction done successfully",
+      userTransactions
+    });
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error." });
   }

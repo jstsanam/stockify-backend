@@ -27,6 +27,7 @@ export const userSignin = async (userData) => {
       throw new Error("Incorrect user email or password!");
     }
   } catch (error) {
+    console.error("Error while finding user by email: ", email, error);
     throw new Error("Incorrect user email or password!");
   }
 };

@@ -1,33 +1,35 @@
 import express from "express";
 import { authenticateUser } from "../middlewares/authMiddleware.js";
+import * as userController from "../controllers/userController.js";
 import {
-  getUserProfileController,
-  updateUserProfileController,
-  getUserWatchlistController,
-  addStockToUserWatchlistController,
-  removeStockFromUserWatchlistController
-} from "../controllers/userController.js";
-import { PROFILE_ROUTE_URL, WATCHLIST_ROUTE_URL } from "../constants/paths.js";
+  PROFILE_ROUTE_URL,
+  TRANSACTIONS_ROUTE_URL,
+  WATCHLIST_ROUTE_URL,
+} from "../constants/paths.js";
 
 // Route handler for Users Route
 const userRoute = express.Router();
 
-userRoute.get(PROFILE_ROUTE_URL, authenticateUser, getUserProfileController);
-userRoute.put(PROFILE_ROUTE_URL, authenticateUser, updateUserProfileController);
-userRoute.get(
-  WATCHLIST_ROUTE_URL,
-  authenticateUser,
-  getUserWatchlistController
-);
-userRoute.patch(
-  WATCHLIST_ROUTE_URL,
-  authenticateUser,
-  addStockToUserWatchlistController
-);
-userRoute.delete(
-  WATCHLIST_ROUTE_URL,
-  authenticateUser,
-  removeStockFromUserWatchlistController
-)
+// User Token Authentication Middleware
+userRoute.use(authenticateUser);
+
+// User Profile Routes
+userRoute
+  .route(PROFILE_ROUTE_URL)
+  .get(userController.getUserProfileController)
+  .put(userController.updateUserProfileController);
+
+// User Watchlist Routes
+userRoute
+  .route(WATCHLIST_ROUTE_URL)
+  .get(userController.getUserWatchlistController)
+  .patch(userController.addStockToUserWatchlistController)
+  .delete(userController.removeStockFromUserWatchlistController);
+
+// User Transactions Routes
+userRoute
+  .route(TRANSACTIONS_ROUTE_URL)
+  .get(userController.getUserTransactionsController)
+  .patch(userController.addUserTransactionController);
 
 export default userRoute;

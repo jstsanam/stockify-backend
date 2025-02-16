@@ -8,6 +8,12 @@ export class UserProfileDTO {
 
 export class UserWatchlistDTO {
   constructor(user) {
-    this.watchlist = user.watchlist;
+    return user.watchlist;
+  }
+}
+
+export class UserTransactionsDTO {
+  constructor(user) {
+    return user.transactions;
   }
 }
