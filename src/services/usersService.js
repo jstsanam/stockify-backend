@@ -29,10 +29,9 @@ export const createUser = async (
       password,
       current_balance,
     });
-
     return newUser;
   } catch (error) {
-    throw new Error("Error creating user!");
+    throw new Error("Error creating user: ", error);
   }
 };
 
