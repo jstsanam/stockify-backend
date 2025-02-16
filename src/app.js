@@ -8,12 +8,26 @@ import {
   AUTH_ROUTE_URL,
   USER_ROUTE_URL
 } from "./constants/paths.js";
+import { ENV } from "./config/environment.js";
 
 export const app = express();
 
+const allowedOrigins = ENV.ALLOWED_ORIGINS.split(',');
 // Enables Cross-Origin Resource Sharing (CORS) to allow requests 
 // from different domains which are blocked otherwise.
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
