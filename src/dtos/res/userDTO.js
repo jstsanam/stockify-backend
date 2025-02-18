@@ -3,6 +3,7 @@ export class UserProfileDTO {
     this.name = user.name;
     this.email = user.email;
     this.gender = user.gender;
+    this.current_balance = user.current_balance;
   }
 }
 
@@ -14,6 +15,7 @@ export class UserWatchlistDTO {
 
 export class UserTransactionsDTO {
   constructor(user) {
-    return user.transactions;
+    this.transactions = user.transactions;
+    this.stockHoldings = user.stockHoldings;
   }
 }

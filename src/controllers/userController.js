@@ -86,12 +86,12 @@ export const getUserTransactionsController = async (req, res) => {
     if (!req.userEmail) {
       return res.status(400).json({ error: "User data not found." });
     }
-    const userTransactions = await userServices.getUserTransactions(
+    const userData = await userServices.getUserTransactions(
       req.userEmail
     );
     return res.status(200).json({
       message: "User transactions fetched successfully",
-      userTransactions,
+      userData,
     });
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error." });
@@ -103,13 +103,13 @@ export const addUserTransactionController = async (req, res) => {
     if (!req.userEmail) {
       return res.status(400).json({ error: "User data not found." });
     }
-    const userTransactions = await userServices.addUserTransaction(
+    const userData = await userServices.addUserTransaction(
       req.userEmail,
       req.body
     );
     return res.status(200).json({
       message: "User transaction done successfully",
-      userTransactions
+      userData
     });
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error." });

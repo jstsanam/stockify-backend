@@ -46,15 +46,17 @@ export const updateUserProfile = async (userEmail, userData) => {
     if (userData.name) updateFields.name = userData.name;
     if (userData.email) updateFields.email = userData.email;
     if (userData.gender) updateFields.gender = userData.gender;
+    if (userData.current_balance)
+      updateFields.current_balance = userData.current_balance;
 
-    const updatedUserProfile = await UserModel.findOneAndUpdate(
+    const updatedUser = await UserModel.findOneAndUpdate(
       { email: userEmail },
       { $set: updateFields },
       { new: true, runValidators: true }
     );
 
-    if (!updatedUserProfile) throw new Error("User not found!");
-    return new UserProfileDTO(updatedUserProfile);
+    if (!updatedUser) throw new Error("User not found!");
+    return new UserProfileDTO(updatedUser);
   } catch (error) {
     throw new Error("Error updating user profile!");
   }
@@ -120,8 +122,8 @@ export const removeStockFromUserWatchlist = async (userEmail, stockData) => {
   }
 };
 
-export const getUserTransactions = async (email) => {
-  const user = await getUserByEmail(email);
+export const getUserTransactions = async (userEmail) => {
+  const user = await getUserByEmail(userEmail);
   return new UserTransactionsDTO(user);
 };
 
@@ -159,6 +161,85 @@ export const addUserTransaction = async (userEmail, transactionData) => {
   }
 
   try {
+    const user = await getUserByEmail(userEmail);
+    const stockIndex = user.stockHoldings.findIndex(
+      (stock) => stock.stock_id === transactionData.stock_id
+    );
+
+    if (transactionData.type === TransactionType.SELL && stockIndex === -1) {
+      throw new Error(
+        `Invalid transaction: You cannot sell "${transactionData.stock_name}" as you never bought it!`
+      );
+    }
+
+    if (transactionData.status !== TransactionStatus.FAILED) {
+      if (transactionData.type === TransactionType.BUY) {
+        if (stockIndex !== -1) {
+          await UserModel.findOneAndUpdate(
+            {
+              email: userEmail,
+              "stockHoldings.stock_id": transactionData.stock_id,
+            },
+            {
+              $inc: {
+                "stockHoldings.$.quantity": transactionData.stock_quantity,
+              },
+            }
+          );
+        } else {
+          await UserModel.findOneAndUpdate(
+            { email: userEmail },
+            {
+              $push: {
+                stockHoldings: {
+                  stock_id: transactionData.stock_id,
+                  stock_name: transactionData.stock_name,
+                  quantity: transactionData.stock_quantity,
+                },
+              },
+            }
+          );
+        }
+      } else if (
+        transactionData.type === TransactionType.SELL &&
+        stockIndex !== -1
+      ) {
+        const stockHolding = user.stockHoldings[stockIndex];
+
+        if (stockHolding.quantity < Number(transactionData.stock_quantity)) {
+          throw new Error(
+            `Insufficient quantity: You have ${stockHolding.quantity} stocks 
+            but tried to sell ${transactionData.stock_quantity}!.`
+          );
+        }
+
+        if (stockHolding.quantity === Number(transactionData.stock_quantity)) {
+          await UserModel.findOneAndUpdate(
+            {
+              email: userEmail,
+            },
+            {
+              $pull: {
+                stockHoldings: { stock_id: transactionData.stock_id },
+              },
+            }
+          );
+        } else {
+          await UserModel.updateOne(
+            {
+              email: userEmail,
+              "stockHoldings.stock_id": transactionData.stock_id,
+            },
+            {
+              $inc: {
+                "stockHoldings.$.quantity": -transactionData.stock_quantity,
+              },
+            }
+          );
+        }
+      }
+    }
+
     const updatedUser = await UserModel.findOneAndUpdate(
       { email: userEmail },
       {
@@ -168,7 +249,7 @@ export const addUserTransaction = async (userEmail, transactionData) => {
     );
 
     if (!updatedUser) throw new Error("User not found!");
-    return updatedUser.transactions;
+    return new UserTransactionsDTO(updatedUser);
   } catch (error) {
     throw new Error("Error in making transaction!");
   }
