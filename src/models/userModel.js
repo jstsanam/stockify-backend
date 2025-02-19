@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
 import { stockSchemaWithoutId } from "./stockModel.js";
-import {
-  TransactionType,
-  TransactionStatus,
-} from "../constants/enums.js";
+import { TransactionType, TransactionStatus } from "../constants/enums.js";
 
-const transactionHistorySchema = new mongoose.Schema({
+const userTransactionsSchema = new mongoose.Schema({
   stock_id: { type: String, required: true },
   stock_name: { type: String, required: true },
   stock_quantity: { type: Number, required: true },
@@ -23,14 +20,21 @@ const transactionHistorySchema = new mongoose.Schema({
   },
 });
 
+const stockHoldingsSchema = new mongoose.Schema({
+  stock_id: { type: String, required: true },
+  stock_name: { type: String, required: true },
+  quantity: { type: Number, required: true },
+});
+
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   gender: { type: String, required: true },
   password: { type: String, required: true },
   current_balance: { type: Number, required: true },
-  transactions: { type: [transactionHistorySchema], required: false },
-  watchlist: {type: [stockSchemaWithoutId], required: false}
+  transactions: { type: [userTransactionsSchema], required: false },
+  watchlist: { type: [stockSchemaWithoutId], required: false },
+  stockHoldings: { type: [stockHoldingsSchema], required: false },
 });
 
 export const UserModel = mongoose.model("user", userSchema);
