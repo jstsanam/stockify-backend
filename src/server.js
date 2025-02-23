@@ -12,19 +12,19 @@ export const io = new Server(server, {
     methods: ["GET", "POST"],
     credentials: true,
   },
-  transports: ["websocket"]
+  transports: ["websocket", "polling"]
 });
 
 io.on("connection", (socket) => {
   console.log(`New user connected: ${socket.id}`);
 
   // Join Room (Stock Detail Page)
-  socket.on("joinStockRoom", ({ stockId, username }) => {
+  socket.on("joinStockRoom", ({ stockId }) => {
     socket.join(stockId);
   });
 
   // Leave Room
-  socket.on("leaveStockRoom", ({ stockId, username }) => {
+  socket.on("leaveStockRoom", ({ stockId }) => {
     socket.leave(stockId);
   });
 
